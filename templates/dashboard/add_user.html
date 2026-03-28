@@ -1,0 +1,35 @@
+﻿<div class="row">
+    <div class="col-md-3">
+        <div class="nav flex-column nav-pills bg-light" aria-orientation="vertical">
+            <a href="dashboard.html" class="nav-link text-dark">Dashboard</a>
+            <a href="users.html" class="nav-link text-dark bg-warning">Users</a>
+            <a href="categories.html" class="nav-link text-dark">Categories</a>
+            <a href="posts.html" class="nav-link text-dark">Posts</a>
+            <a href="#" class="nav-link text-dark">Logout</a>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h2>Add New User</h2>
+        <form action="" method="POST">
+            <div class="form-group mb-2">
+                <label for="fullName">Full Name</label>
+                <input id="fullName" type="text" class="form-control" placeholder="User full name">
+            </div>
+            <div class="form-group mb-2">
+                <label for="userEmail">Email</label>
+                <input id="userEmail" type="email" class="form-control" placeholder="name@example.com">
+            </div>
+            <div class="form-group mb-3">
+                <label for="userRole">Role</label>
+                <select id="userRole" class="form-control">
+                    <option>Author</option>
+                    <option>Editor</option>
+                    <option>Admin</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-warning">Submit</button>
+        </form>
+        <br>
+    </div>
+</div>
