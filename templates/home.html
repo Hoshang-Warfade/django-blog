@@ -1,68 +1,54 @@
-﻿{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
-    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
-</head>
-<body>
-  <div class="container mt-4">
-    <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url({% static 'images/cricket.jpg' %});background-blend-mode: overlay;background-size:cover;">
+﻿{% extends 'base.html' %}
+
+
+{% block content %}
+    {% for post in featured_posts %}
+    {% if forloop.first %}
+    <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url({{ post.featured_image.url }} );background-blend-mode: overlay;background-size:cover;">
       <div class="col-md-8 px-0">
-        <h1 class="display-4 font-italic">How To Build Better UI Habits As A Beginner</h1>
-        <p class="lead my-3">Start with layout rhythm, readable typography, and deliberate spacing before diving into frameworks.</p>
+        <h1 class="display-4 font-italic">{{ post.title | truncatewords:10 }}</h1>
+        <p class="lead my-3">{{post.short_description|truncatewords:25}}</p>
         <p class="lead mb-0"><a href="blog.html" class="text-white font-weight-bold">Continue reading...</a></p>
       </div>
     </div>
+    {% endif %}
+    {% endfor %}
 
     <!-- Featured Posts -->
-    <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Featured Posts</h3>
+    <h3 class="text-uppercase text-warning mt-4 mb-4" style="letter-spacing: 2px;">Featured Posts</h3>
     <div class="row mb-2">
-      <div class="col-md-6">
-        <div class="card border-0" >
-          <div class="card-body">
-            <h3><a href="blog.html" class="text-dark">Understanding CSS Specificity In 20 Minutes</a></h3>
-            <small class="mb-1 text-muted">2 days ago | Rathan Kumar</small>
-            <p class="card-text">A quick, practical guide to resolving style conflicts without using !important everywhere.</p>
+    {% for post in featured_posts %}
+      {% if not forloop.first %}
+        <div class="col-md-6">
+          <div class="card border-0" >
+            <div class="card-body">
+              <h3><a href="#" class="text-dark">{{ post.title | truncatewords:10 }}</a></h3>
+              <small class="mb-1 text-muted">{{ post.created_at | timesince }} ago | {{ post.author }} </small>
+              <p class="card-text">{{ post.short_description|truncatewords:25 }}</p>
+            </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="card border-0" >
-          <div class="card-body">
-            <h3><a href="blog.html" class="text-dark">Design Tokens For Small Projects</a></h3>
-            <small class="mb-1 text-muted">4 days ago | Rathan Kumar</small>
-            <p class="card-text">Use a tiny set of reusable colors, radii, and spacing values to keep UI consistent.</p>
-          </div>
-        </div>
-      </div>
+       
+        {% endif %}
+      {% endfor %}
     </div>
-
+       
     <!-- Recent Articles -->
-    <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Recent Articles</h3>
+    <h3 class="text-uppercase text-warning mt-5 mb-4" style="letter-spacing: 2px;">Recent Articles</h3>
     <main role="main" class="container p-0">
       <div class="row">
         <div class="col-md-8 blog-main">
+           {% for post in posts %}
           <div class="card border-0" >
             <div class="card-body">
-              <h3> <a href="blog.html" class="text-dark">Semantic HTML For Cleaner Components</a></h3>
-              <small class="mb-1 text-muted">1 week ago | Rathan Kumar</small>
-              <p class="card-text">Small semantic improvements make your code easier to scan and more accessible by default.</p>
+              <h3><a href="#" class="text-dark">{{ post.title | truncatewords:10 }}</a></h3>
+              <small class="mb-1 text-muted">{{ post.created_at | timesince }} ago | {{ post.author }} </small>
+              <p class="card-text">{{ post.short_description|truncatewords:25 }}</p>
             </div>
           </div>
+          {% endfor %}
 
-          <div class="card border-0" >
-            <div class="card-body">
-              <h3> <a href="blog.html" class="text-dark">Bootstrap Utilities You Actually Need</a></h3>
-              <small class="mb-1 text-muted">10 days ago | Rathan Kumar</small>
-              <p class="card-text">A focused list of utility classes that speed up layout work while avoiding class clutter.</p>
-            </div>
-          </div>
+         
         </div>
 
         <aside class="col-md-4 blog-sidebar">
@@ -82,8 +68,7 @@
         </aside>
       </div>
     </main>
-  </div>
-</body>
-</html>
+
+{% endblock %}
 
 
