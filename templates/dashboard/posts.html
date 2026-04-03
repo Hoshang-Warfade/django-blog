@@ -1,17 +1,12 @@
-﻿<div class="row">
-    <div class="col-md-3">
-        <div class="nav flex-column nav-pills bg-light" aria-orientation="vertical">
-            <a href="dashboard.html" class="nav-link text-dark">Dashboard</a>
-            <a href="users.html" class="nav-link text-dark">Users</a>
-            <a href="categories.html" class="nav-link text-dark">Categories</a>
-            <a href="posts.html" class="nav-link text-dark bg-warning">Posts</a>
-            <a href="#" class="nav-link text-dark">Logout</a>
-        </div>
-    </div>
+﻿{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    {% include 'dashboard/sidebar.html' %}
 
     <div class="col-md-9">
         <h2>All Posts</h2>
-        <a href="add_post.html" class="btn btn-dark text-light float-right mb-2">Add New</a>
+        <a href="{% url 'add_post' %}" class="btn btn-dark text-light float-right mb-2">Add New</a>
         <table class="table table-hover">
             <thead>
               <tr>
@@ -25,33 +20,24 @@
               </tr>
             </thead>
             <tbody>
+              {% for post in posts %}
               <tr>
-                <td>1</td>
-                <td>Static To Dynamic UI Workflow</td>
-                <td>Technology</td>
-                <td>Rathan Kumar</td>
-                <td>Published</td>
-                <td><i class="fa fa-check text-success"></i></td>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ post.title|truncatewords:8 }}</td>
+                <td>{{ post.category }}</td>
+                <td>{{ post.author }}</td>
+                <td>{{ post.status }}</td>
+                <td><i class="fa {% if post.is_featured %} fa-check text-success {% else %} fa-times text-danger{% endif %}"></i></td>
                 <td>
-                    <a href="edit_post.html"><i class="fa fa-edit text-success"></i></a>
+                    <a href="{% url 'edit_post' post.pk %}"><i class="fa fa-edit text-success"></i></a>
                     &nbsp;
-                    <a href="#"><i class="fa fa-trash text-danger"></i></a>
+                    <a href="{% url 'delete_post' post.id %}"><i class="fa fa-trash text-danger"></i></a>
                 </td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>Beginner Friendly Form Design</td>
-                <td>Design</td>
-                <td>Rathan Kumar</td>
-                <td>Draft</td>
-                <td><i class="fa fa-times text-danger"></i></td>
-                <td>
-                    <a href="edit_post.html"><i class="fa fa-edit text-success"></i></a>
-                    &nbsp;
-                    <a href="#"><i class="fa fa-trash text-danger"></i></a>
-                </td>
-              </tr>
+              {%endfor%}
+              
             </tbody>
           </table>
     </div>
 </div>
+{% endblock %}
