@@ -1,17 +1,11 @@
-﻿<div class="row">
-    <div class="col-md-3">
-        <div class="nav flex-column nav-pills bg-light" aria-orientation="vertical">
-            <a href="dashboard.html" class="nav-link text-dark">Dashboard</a>
-            <a href="users.html" class="nav-link text-dark bg-warning">Users</a>
-            <a href="categories.html" class="nav-link text-dark">Categories</a>
-            <a href="posts.html" class="nav-link text-dark">Posts</a>
-            <a href="#" class="nav-link text-dark">Logout</a>
-        </div>
-    </div>
-
+﻿{% extends 'base.html' %}
+    {% block content %}
+<div class="row">
+    {% include 'dashboard/sidebar.html' %}  
     <div class="col-md-9">
+      {% if perms.auth.view_user %}
         <h2>All Users</h2>
-        <a href="add_user.html" class="btn btn-dark text-light float-right mb-2">Add User</a>
+          <a href="{% url 'add_user' %}" class="btn btn-dark text-light float-right mb-2">Add User</a>
         <table class="table table-hover">
             <thead>
               <tr>
@@ -26,35 +20,27 @@
               </tr>
             </thead>
             <tbody>
+              {% for user in users   %}
               <tr>
-                <td>1</td>
-                <td>Rathan Kumar</td>
-                <td>rathan</td>
-                <td>rathan@example.com</td>
-                <td><i class="fa fa-check text-success"></i></td>
-                <td><i class="fa fa-check text-success"></i></td>
-                <td><i class="fa fa-times text-danger"></i></td>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ user.get_full_name }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td><i class="fa {% if user.is_active %}fa-check text-success{% else %}fa-times text-danger{% endif %} "></i></td>
+                <td><i class="fa {% if user.is_staff %}fa-check text-success{% else %}fa-times text-danger{% endif %} "></i></td>
+                <td><i class="fa {% if user.is_superuser %}fa-check text-success{% else %}fa-times text-danger{% endif %} "></i></td>
                 <td>
-                    <a href="edit_user.html"><i class="fa fa-edit text-success"></i></a>
+                    <a href="{% url 'edit_user' user.id %}"><i class="fa fa-edit text-success"></i></a>
                     &nbsp;
-                    <a href="#"><i class="fa fa-trash text-danger"></i></a>
+                    <a href="{% url 'delete_user' user.id %}"><i class="fa fa-trash text-danger"></i></a>
                 </td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>Aditi Sharma</td>
-                <td>aditi</td>
-                <td>aditi@example.com</td>
-                <td><i class="fa fa-check text-success"></i></td>
-                <td><i class="fa fa-times text-danger"></i></td>
-                <td><i class="fa fa-times text-danger"></i></td>
-                <td>
-                    <a href="edit_user.html"><i class="fa fa-edit text-success"></i></a>
-                    &nbsp;
-                    <a href="#"><i class="fa fa-trash text-danger"></i></a>
-                </td>
-              </tr>
+              {% endfor %}
             </tbody>
           </table>
+          {% else %}
+          <h5>You do not have permission to view users.</h5>
+          {% endif %}
     </div>
 </div>
+{% endblock %}

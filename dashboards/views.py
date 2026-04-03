@@ -2,9 +2,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from blogs.models import Blog, Category
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
-
-
-from dashboards.forms import CategoryForm, PostForm
+from django.contrib.auth.models import User
+from dashboards.forms import CategoryForm, EditUserForm, PostForm, AddUserForm
 
 # Create your views here.
 @login_required(login_url='login')
@@ -102,3 +101,51 @@ def edit_post(request, pk):
         'post': post
     }
     return render(request, 'dashboard/edit_post.html', context)
+
+
+
+def users(request):
+    users=User.objects.all()
+    context={ 'users': users }  
+    return render(request, 'dashboard/users.html',context)
+
+
+def add_user(request):
+    if(request.method=='POST'):
+        form=AddUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('users')
+    else:
+        form=AddUserForm()
+    
+    context={ 'form': form }
+    return render(request, 'dashboard/add_user.html', context)
+
+
+def delete_user(request, pk):
+    user=get_object_or_404(User, id=pk)
+    if not request.user==user:
+        if user.is_superuser:
+            if request.user.is_superuser:
+                user.delete()
+        else:
+            user.delete()
+    return redirect('users')
+
+
+def edit_user(request, pk):
+    user=get_object_or_404(User, id=pk)
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('users')
+    else:
+        form = EditUserForm(instance=user)
+
+    context = {
+        'form': form,
+        'user': user
+    }
+    return render(request, 'dashboard/edit_user.html', context)
