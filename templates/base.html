@@ -36,8 +36,8 @@
               </span>
             {% else %}
               <span class="text-muted">
-                Welcome, {{ user.username }}!
-                <a class="btn btn-sm btn-warning" href="{% url 'logout' %}">Logout</a> &nbsp;
+                <a class="btn btn-sm btn-warning" href="{% url 'dashboard' %}">Dashboard</a> &nbsp;
+                <a class="btn btn-sm btn-warning" href="{% url 'logout' %}">Logout</a> 
               </span>
             {% endif %}
 
