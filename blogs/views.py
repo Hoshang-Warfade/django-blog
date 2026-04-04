@@ -1,7 +1,9 @@
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Category, Blog
+from .models import Category, Blog,Comment
 from django.db.models import Q
+
 
 # Create your views here.
 
@@ -26,8 +28,21 @@ def post_by_category(request, category_id):
 
 def blog(request, slug):
    single_blog=get_object_or_404(Blog, slug=slug, status='Published')
+   if request.method=='POST':
+      comment=request.POST.get('comment')
+      user=request.user
+      Comment.objects.create(user=user, blog=single_blog, comment=comment)
+      comments=Comment.objects.filter(blog=single_blog)
+      context={
+         'single_blog': single_blog,
+         'comments': comments
+       }
+      return HttpResponseRedirect
+   
+   comments=Comment.objects.filter(blog=single_blog)
    context={
-         'single_blog': single_blog
+         'single_blog': single_blog,
+         'comments': comments
    }
    return render(request, 'blog.html', context)
 
